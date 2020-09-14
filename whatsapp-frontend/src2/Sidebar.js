@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { Avatar, IconButton } from '@material-ui/core';
 import { SearchOutlined } from '@material-ui/icons';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
@@ -8,15 +7,12 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import './Sidebar.css';
 import SidebarChat from './SidebarChat';
 
-
-function Sidebar({ rooms }) {
-
+function Sidebar() {
   return (
     <div className='sidebar'>
       <div className='sidebar__header'>
-        <Link to='/'>
-          <Avatar src='https://raw.githubusercontent.com/HF97/HF97.github.io/master/images/foto.png' alt='user image'/>
-        </Link>
+        <Avatar src='https://raw.githubusercontent.com/HF97/HF97.github.io/master/images/foto.png' alt='user image'/>
+        
         <div className='sidebar__headerRight'>
           <IconButton>
             <DonutLargeIcon />
@@ -38,10 +34,10 @@ function Sidebar({ rooms }) {
       </div>
 
       <div className='sidebar__chats'>
-        <SidebarChat key="add" addNewChat />
-        {rooms.map(room => (
-          <SidebarChat key={room._id} id={room._id} name={room.name} img={room.img_url} />
-        ))}
+        
+        <SidebarChat />
+        <SidebarChat />
+        <SidebarChat />
       </div>
      </div>
   )

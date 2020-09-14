@@ -5,17 +5,12 @@
     border-bottom: 1px solid #f6f6f6;
 }
 
-a {
-    text-decoration: none !important;
-    color: black;
-}
-
 .sidebarChat:hover {
     background-color: #ebebeb;
 }
 
 .sidebarChat__info {
-    padding: 10px;
+    margin-left: 15px;
 }
 
 .sidebarChat__info > h2 {

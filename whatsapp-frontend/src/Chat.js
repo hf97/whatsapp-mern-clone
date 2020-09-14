@@ -1,34 +1,79 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Pusher from 'pusher-js';
+import { useParams } from 'react-router-dom';
 import { Avatar, IconButton } from '@material-ui/core';
 import { SearchOutlined, AttachFile, MoreVert, InsertEmoticon } from '@material-ui/icons';
 import MicIcon from '@material-ui/icons/Mic';
 import './Chat.css';
 import axios from './axios';
+import Message from './Message';
 
-function Chat({ messages }) {
+
+function Chat() {
   const [input, setInput] = useState('');
+  const { roomId } = useParams();
+  const [room, setRoom] = useState('');
+  const [messages, setMessages] = useState([]);
+
+  async function fetchRoom() {
+    const r = await axios.get(`/get/rooms/${roomId}`)
+      .then(res => {
+        setRoom(res.data);
+      });
+    return r;
+  };
+    
+  async function fetchMessages() {
+    const m = await axios.get(`/get/messages/room/${roomId}`)
+      .then(res => {
+        setMessages(res.data);
+      })
+    return m;
+  };
+
+  useEffect(() => {
+    if (roomId) {
+      fetchRoom();
+      fetchMessages();
+    }
+  }, [roomId]);
+
+  useEffect(() => {
+    const pusher = new Pusher('96ee846e6ca898a809de', {
+      cluster: 'eu'
+    });
+
+    const channel2 = pusher.subscribe('pMessages');
+    channel2.bind('inserted', (data) => {
+      setMessages([...messages, data]);
+    });
+    
+    return () => {
+      channel2.unbind_all();
+      channel2.unsubscribe();
+    }
+  }, [messages]);
 
   const sendMessage = async (event) => {
     event.preventDefault();
 
-    axios.post('/messages/new', {
-      name: "Hugo",
+    //TODO name
+    axios.post(`/new/message`, {
       message: input,
-      timestamp: "now",
-      received: true
+      name: "Hugo",
+      room: roomId
     })
-
     setInput('');
   }
 
   return (
     <div className='chat'>
       <div className='chat__header'>
-        <Avatar />
+        <Avatar src={room[0] ? room[0].img_url : ""} />
 
         <div className='chat__headerInfo'>
-          <h3>Room name</h3>
-          <p>Last seen at ...</p>
+          <h3>{room[0] ? room[0].name : ""}</h3>
+          <p>{messages.length > 0 ? `Last message: ${new Date(messages[messages.length - 1].updatedAt).toLocaleTimeString()} ${new Date(messages[messages.length - 1].updatedAt).toLocaleDateString()}` : ""}</p>
         </div>
 
         <div className='chat__headerRight'>
@@ -45,17 +90,8 @@ function Chat({ messages }) {
       </div>
 
       <div className='chat__body'>
-        {/* should have key */}
         {messages.map((message) => (
-          <p className={`chat__message ${message.received && "chat__reciever"}`}>
-            <span className='chat__name'>
-              {message.name}
-            </span>
-            {message.message}
-            <span className='chat__timestamp'>
-              {message.timestamp}
-            </span>
-          </p>
+          <Message key={message._id} message={message.message} name={message.name} updatedAt={message.updatedAt} />
         ))}
       </div>
 

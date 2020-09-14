@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Pusher from 'pusher-js';
 import './App.css';
 import Sidebar from './Sidebar';
@@ -6,39 +7,52 @@ import Chat from './Chat';
 import axios from './axios';
 
 function App() {
-  const [messages, setMessages] = useState([]);
+  const [rooms, setRooms] = useState([]);
+
+  async function fetchRooms() {
+    const rooms = await axios.get('/get/rooms')
+      .then(res => {
+        setRooms(res.data);
+      });
+    return rooms;
+  }
 
   useEffect(() => {
-    axios.get('/messages/sync')
-      .then(res => {
-        setMessages(res.data);
-      })
+    fetchRooms();
   }, [])
 
   useEffect(() => {
-    const pusher = new Pusher('11fec21494d2e5de8b19', {
+    const pusher = new Pusher('96ee846e6ca898a809de', {
       cluster: 'eu'
     });
 
-    const channel = pusher.subscribe('messages');
-    channel.bind('inserted', (data) => {
-      setMessages([...messages, data]);
+    const channel1 = pusher.subscribe('pRooms');
+    channel1.bind('inserted', (data) => {
+      setRooms([...rooms, data]);
     });
-
+    
     return () => {
-      channel.unbind_all();
-      channel.unsubscribe();
+      channel1.unbind_all();
+      channel1.unsubscribe();
     }
-  }, [messages]);
-
-  console.log(messages)
+  }, [rooms]);
 
   return (
     <div className="app">
       <div className='app__body'>
-        <Sidebar />
 
-        <Chat messages={messages} />
+        <Router>
+          <Sidebar rooms={rooms}/>
+          <Switch>
+            <Route path='/room/:roomId'>
+              <Chat rooms />
+            </Route>
+            <Route path='/'>
+              <Chat rooms />
+            </Route>
+          </Switch>
+        </Router>
+
       </div>
     </div>
   );
