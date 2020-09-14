@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Pusher from 'pusher-js';
 import { useParams } from 'react-router-dom';
 import { Avatar, IconButton } from '@material-ui/core';
@@ -7,6 +7,10 @@ import MicIcon from '@material-ui/icons/Mic';
 import './Chat.css';
 import axios from './axios';
 import Message from './Message';
+import { useStateValue } from './StateProvider';
+
+
+import { animateScroll } from "react-scroll";
 
 
 function Chat() {
@@ -14,6 +18,7 @@ function Chat() {
   const { roomId } = useParams();
   const [room, setRoom] = useState('');
   const [messages, setMessages] = useState([]);
+  const [{ user }, dispatch] = useStateValue();
 
   async function fetchRoom() {
     const r = await axios.get(`/get/rooms/${roomId}`)
@@ -22,7 +27,7 @@ function Chat() {
       });
     return r;
   };
-    
+
   async function fetchMessages() {
     const m = await axios.get(`/get/messages/room/${roomId}`)
       .then(res => {
@@ -47,7 +52,7 @@ function Chat() {
     channel2.bind('inserted', (data) => {
       setMessages([...messages, data]);
     });
-    
+
     return () => {
       channel2.unbind_all();
       channel2.unsubscribe();
@@ -57,14 +62,20 @@ function Chat() {
   const sendMessage = async (event) => {
     event.preventDefault();
 
-    //TODO name
     axios.post(`/new/message`, {
       message: input,
-      name: "Hugo",
+      name: user.displayName,
       room: roomId
     })
     setInput('');
   }
+
+
+  const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
+  const myRef = useRef(null)
+  const executeScroll = () => scrollToRef(myRef)
+
+
 
   return (
     <div className='chat'>
@@ -89,7 +100,7 @@ function Chat() {
         </div>
       </div>
 
-      <div className='chat__body'>
+      <div className='chat__body' ref={myRef}>
         {messages.map((message) => (
           <Message key={message._id} message={message.message} name={message.name} updatedAt={message.updatedAt} />
         ))}

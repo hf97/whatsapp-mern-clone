@@ -5,8 +5,11 @@ import './App.css';
 import Sidebar from './Sidebar';
 import Chat from './Chat';
 import axios from './axios';
+import Login from './Login';
+import { useStateValue } from './StateProvider';
 
 function App() {
+  const [{ user }, dispatch] = useStateValue();
   const [rooms, setRooms] = useState([]);
 
   async function fetchRooms() {
@@ -30,7 +33,7 @@ function App() {
     channel1.bind('inserted', (data) => {
       setRooms([...rooms, data]);
     });
-    
+
     return () => {
       channel1.unbind_all();
       channel1.unsubscribe();
@@ -40,19 +43,21 @@ function App() {
   return (
     <div className="app">
       <div className='app__body'>
-
-        <Router>
-          <Sidebar rooms={rooms}/>
-          <Switch>
-            <Route path='/room/:roomId'>
-              <Chat rooms />
-            </Route>
-            <Route path='/'>
-              <Chat rooms />
-            </Route>
-          </Switch>
-        </Router>
-
+        {!user ? (
+          <Login />
+        ) : (
+            <Router>
+              <Sidebar rooms={rooms} />
+              <Switch>
+                <Route path='/room/:roomId'>
+                  <Chat rooms />
+                </Route>
+                <Route path='/'>
+                  <Chat rooms />
+                </Route>
+              </Switch>
+            </Router>
+          )}
       </div>
     </div>
   );

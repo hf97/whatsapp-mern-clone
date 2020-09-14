@@ -7,15 +7,20 @@ import ChatIcon from '@material-ui/icons/Chat';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import './Sidebar.css';
 import SidebarChat from './SidebarChat';
+import { useStateValue } from './StateProvider';
+
 
 
 function Sidebar({ rooms }) {
+  const [{ user}, dispatch] = useStateValue();
+
+  console.log(user)
 
   return (
     <div className='sidebar'>
       <div className='sidebar__header'>
         <Link to='/'>
-          <Avatar src='https://raw.githubusercontent.com/HF97/HF97.github.io/master/images/foto.png' alt='user image'/>
+          <Avatar src={user?.photoURL} alt='user image' />
         </Link>
         <div className='sidebar__headerRight'>
           <IconButton>
