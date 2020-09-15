@@ -33,6 +33,9 @@
     background-position: center;
     padding: 30px;
     overflow-x: hidden;
+    overflow:auto;
+    display:flex;
+    flex-direction:column-reverse;
 }
 
 .chat__footer {
@@ -68,4 +71,25 @@
 .chat__footer > form > .MuiSvgIcon-root{
     padding: 10px;
     color: gray;
+}
+
+@media(width: 375px){
+    .chat__header{
+        height: 100px;
+        background-color: #ebebeb;
+    }
+}
+
+@media(width: 360px){
+    .chat__header{
+        height: 100px;
+        background-color: #ebebeb;
+    }
+}
+
+@media(width: 320px){
+    .chat__header{
+        height: 100px;
+        background-color: #ebebeb;
+    }
 }

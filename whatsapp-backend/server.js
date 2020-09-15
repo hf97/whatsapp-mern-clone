@@ -37,7 +37,6 @@ db.once('open', () => {
     const changeStreamR = msgCollectionR.watch();
 
     changeStreamR.on('change', (change) => {
-        // console.log(change);
         //new room
         if (change.operationType === 'insert') {
             const messageDetails = change.fullDocument;
@@ -56,8 +55,7 @@ db.once('open', () => {
     const changeStreamM = msgCollectionM.watch();
 
     changeStreamM.on('change', (change) => {
-        console.log(change);
-        //new room
+        //new message
         if (change.operationType === 'insert') {
             const messageDetails = change.fullDocument;
             pusher.trigger('pMessages', 'inserted', {

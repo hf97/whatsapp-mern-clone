@@ -12,9 +12,7 @@ import { useStateValue } from './StateProvider';
 
 
 function Sidebar({ rooms }) {
-  const [{ user}, dispatch] = useStateValue();
-
-  console.log(user)
+  const [{ user}] = useStateValue();
 
   return (
     <div className='sidebar'>

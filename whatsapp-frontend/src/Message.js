@@ -3,12 +3,9 @@ import './Message.css';
 import { useStateValue } from './StateProvider';
 
 function Message({ name, message, updatedAt}) {
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
   
   const date = new Date(updatedAt);
-
-  console.log(message.name)
-  console.log(user.displayName)
 
   return (
     <div className='message'>

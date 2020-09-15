@@ -13,3 +13,12 @@
   width: 90vw;
   box-shadow: -1px 4px 20px -6px rgba(0, 0, 0, 0.75);
 }
+
+@media(max-width: 767px){
+  .app__body{
+    height: 100vh;
+    width: 100vw;
+    display: inline-block;
+    box-shadow: none;
+  }
+}

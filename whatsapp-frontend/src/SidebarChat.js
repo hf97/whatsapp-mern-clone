@@ -4,13 +4,13 @@ import { Avatar } from '@material-ui/core';
 import './SidebarChat.css';
 import axios from './axios';
 
-
-function SidebarChat({ id, name, img, lastMessage, addNewChat }) {
+function SidebarChat({ id, name, img, addNewChat }) {
 
   const createChat = () => {
     const roomName = String(prompt("Please enter room name and image (space( ) to separate):"))
     const [name, image] = roomName.split(/[ ]+/)
-    if(name.length>0){
+
+    if(name && image){
       const rooms = axios.post('/new/room', {
         "name": name,
         "img_url": image,

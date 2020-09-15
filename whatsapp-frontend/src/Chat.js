@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pusher from 'pusher-js';
 import { useParams } from 'react-router-dom';
 import { Avatar, IconButton } from '@material-ui/core';
@@ -9,16 +9,12 @@ import axios from './axios';
 import Message from './Message';
 import { useStateValue } from './StateProvider';
 
-
-import { animateScroll } from "react-scroll";
-
-
 function Chat() {
   const [input, setInput] = useState('');
   const { roomId } = useParams();
   const [room, setRoom] = useState('');
   const [messages, setMessages] = useState([]);
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
 
   async function fetchRoom() {
     const r = await axios.get(`/get/rooms/${roomId}`)
@@ -40,7 +36,11 @@ function Chat() {
     if (roomId) {
       fetchRoom();
       fetchMessages();
+    }else{
+      setRoom("");
+      setMessages([]);
     }
+    console.log(roomId)
   }, [roomId]);
 
   useEffect(() => {
@@ -52,16 +52,16 @@ function Chat() {
     channel2.bind('inserted', (data) => {
       setMessages([...messages, data]);
     });
-
+    
     return () => {
       channel2.unbind_all();
       channel2.unsubscribe();
     }
   }, [messages]);
-
+  
   const sendMessage = async (event) => {
     event.preventDefault();
-
+    
     axios.post(`/new/message`, {
       message: input,
       name: user.displayName,
@@ -69,14 +69,7 @@ function Chat() {
     })
     setInput('');
   }
-
-
-  const scrollToRef = (ref) => window.scrollTo(0, ref.current.offsetTop)
-  const myRef = useRef(null)
-  const executeScroll = () => scrollToRef(myRef)
-
-
-
+  
   return (
     <div className='chat'>
       <div className='chat__header'>
@@ -100,8 +93,8 @@ function Chat() {
         </div>
       </div>
 
-      <div className='chat__body' ref={myRef}>
-        {messages.map((message) => (
+      <div className='chat__body' >
+        {messages.slice(0).reverse().map((message) => (
           <Message key={message._id} message={message.message} name={message.name} updatedAt={message.updatedAt} />
         ))}
       </div>

@@ -9,7 +9,7 @@ import Login from './Login';
 import { useStateValue } from './StateProvider';
 
 function App() {
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user }] = useStateValue();
   const [rooms, setRooms] = useState([]);
 
   async function fetchRooms() {
