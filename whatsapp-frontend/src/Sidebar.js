@@ -5,14 +5,22 @@ import { SearchOutlined } from '@material-ui/icons';
 import DonutLargeIcon from '@material-ui/icons/DonutLarge';
 import ChatIcon from '@material-ui/icons/Chat';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import './Sidebar.css';
 import SidebarChat from './SidebarChat';
 import { useStateValue } from './StateProvider';
+import { auth } from './firebase';
 
 
 
 function Sidebar({ rooms }) {
   const [{ user}] = useStateValue();
+
+  const handleAuthentication = () => {
+    if (user) {
+      auth.signOut();
+    }
+  }
 
   return (
     <div className='sidebar'>
@@ -29,6 +37,9 @@ function Sidebar({ rooms }) {
           </IconButton>
           <IconButton>
             <MoreVertIcon />
+          </IconButton>
+          <IconButton>
+            <ExitToAppIcon onClick={handleAuthentication} />
           </IconButton>
         </div>
       </div>
