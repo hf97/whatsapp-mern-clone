@@ -167,20 +167,5 @@ app.post('/new/message', (req, res) => {
 })
 
 
-
-
-// add new message to a room
-// app.post('/:roomId/message/new', (req, res) => {
-//     const message = req.body
-//     rooms.update({ _id: req.params.roomId }, { $push: { "messages": message } }, (err, data) => {
-//         if (err) {
-//             res.status(500).send(err)
-//         } else {
-//             res.status(201).send(`New message created: ${data}`)
-//         }
-//     })
-// })
-
-
 // listener
 app.listen(port, () => console.log(`Listening on localhost: ${port}`));
