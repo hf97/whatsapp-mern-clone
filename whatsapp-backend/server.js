@@ -130,6 +130,18 @@ app.get('/get/messages/room/:roomId', (req, res) => {
     })
 })
 
+//get last message from roomId
+app.get('/:roomId/lastmessage', (req, res) => {
+    messages.find({ room: req.params.roomId }, {}, { sort: { 'updatedAt' : -1 } }, (err, data) => {
+        if (err) {
+            res.status(500).send(err)
+        } else {
+            res.status(200).send(data[0])
+        }
+    })
+})
+
+
 // create new room
 app.post('/new/room', (req, res) => {
     const dbMessage = req.body
@@ -153,6 +165,8 @@ app.post('/new/message', (req, res) => {
         }
     })
 })
+
+
 
 
 // add new message to a room

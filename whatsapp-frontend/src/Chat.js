@@ -40,7 +40,6 @@ function Chat() {
       setRoom("");
       setMessages([]);
     }
-    console.log(roomId)
   }, [roomId]);
 
   useEffect(() => {
