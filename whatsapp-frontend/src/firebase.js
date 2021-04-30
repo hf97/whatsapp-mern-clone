@@ -1,5 +1,6 @@
 import firebase from 'firebase';
 
+// API deprecated, just example, should be a environment variable
 const firebaseConfig = {
     apiKey: "AIzaSyAMNv_Uf-gDV0ULCj9yTlr928D3fwwytzk",
     authDomain: "whatsapp-mern-clone-72c45.firebaseapp.com",

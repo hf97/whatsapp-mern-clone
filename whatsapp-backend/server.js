@@ -11,6 +11,7 @@ const port = process.env.PORT || 9000;
 app.use(express.json());
 app.use(cors());
 
+// deprecated, just example, should be a environment variable
 // connect to db
 const connection_url = 'mongodb+srv://admin:yxEaVXJ86nyf6oup@cluster0.zhln6.mongodb.net/<whatsapp-mern-db>?retryWrites=true&w=majority'
 mongoose.connect(connection_url, {
