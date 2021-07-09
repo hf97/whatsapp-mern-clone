@@ -1,5 +1,4 @@
-# whatsapp-mern-clone
-Whatsapp mern clone
+# Whatsapp mern clone
 
 ![Demo](https://github.com/hf97/whatsapp-mern-clone/blob/master/demo/demo.gif)
 
